@@ -12,12 +12,21 @@ try {
                 cwd: process.cwd(),
                 shell: true
             });
+            
+            const handlers = { data: [], exit: [] };
+
+            proc.stdout.on('data', d => handlers.data.forEach(cb => cb(d.toString())));
+            proc.stderr.on('data', d => handlers.data.forEach(cb => cb(d.toString())));
+            proc.on('exit', code => handlers.exit.forEach(cb => cb(code)));
+            proc.on('error', err => handlers.data.forEach(cb => cb(`\r\n[Error] ${err.message}\r\n`)));
+
             return {
                 on: (event, cb) => {
-                    if (event === 'data') proc.stdout.on('data', d => cb(d.toString()));
-                    if (event === 'exit') proc.on('exit', cb);
+                    if (handlers[event]) handlers[event].push(cb);
                 },
-                write: (data) => proc.stdin.write(data),
+                write: (data) => {
+                    if (!proc.killed) proc.stdin.write(data);
+                },
                 resize: () => {},
                 kill: () => proc.kill()
             };

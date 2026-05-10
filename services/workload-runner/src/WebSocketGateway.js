@@ -19,11 +19,21 @@ class WebSocketGateway {
             const sessionId = 'test-session-' + Math.random().toString(36).substr(2, 9);
 
             // Spawn the PTY session
-            const term = PTYManager.spawn(sessionId);
+            let term;
+            try {
+                term = PTYManager.spawn(sessionId);
+            } catch (err) {
+                console.error(`[PTY] Failed to spawn for ${sessionId}:`, err);
+                ws.send(JSON.stringify({ type: 'output', data: '\r\n[System Error] Failed to initialize terminal.\r\n' }));
+                ws.close();
+                return;
+            }
 
             // Pipe PTY output to WebSocket
             term.on('data', (data) => {
-                ws.send(JSON.stringify({ type: 'output', data }));
+                if (ws.readyState === ws.OPEN) {
+                    ws.send(JSON.stringify({ type: 'output', data }));
+                }
             });
 
             term.on('exit', () => {
