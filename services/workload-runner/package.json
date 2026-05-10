@@ -15,6 +15,7 @@
   "dependencies": {
     "dockerode": "^5.0.0",
     "express": "^5.2.1",
-    "ws": "^8.20.0"
+    "ws": "^8.20.0",
+    "node-pty": "^1.1.0"
   }
 }
