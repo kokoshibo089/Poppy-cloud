@@ -18,31 +18,60 @@ term.open(document.getElementById('terminal'));
 fitAddon.fit();
 
 // 2. WebSocket Connection
-const socket = new WebSocket(`ws://${window.location.host}`);
+let socket;
+let reconnectInterval = 2000;
 
-socket.onopen = () => {
-    console.log('[Socket] Connected to GitLinux Kernel');
-    term.write('\x1b[32mWelcome to GitLinux Cloud OS v1.0.0\x1b[m\r\n');
-};
+function connect() {
+    socket = new WebSocket(`ws://${window.location.host}`);
 
-socket.onmessage = (event) => {
-    const payload = JSON.parse(event.data);
-    if (payload.type === 'output') {
-        term.write(payload.data);
-    }
-};
+    socket.onopen = () => {
+        console.log('[Socket] Connected to GitLinux Kernel');
+        term.write('\r\n\x1b[32m[System] Connected to Kernel.\x1b[m\r\n');
+        reconnectInterval = 2000;
+    };
+
+    socket.onmessage = (event) => {
+        try {
+            const payload = JSON.parse(event.data);
+            if (payload.type === 'output') {
+                term.write(payload.data);
+            } else if (payload.type === 'exit') {
+                term.write('\r\n\x1b[31m[System] Session terminated.\x1b[m\r\n');
+            }
+        } catch (e) {
+            console.error('[Socket] Message parse error', e);
+        }
+    };
+
+    socket.onclose = () => {
+        console.log('[Socket] Disconnected. Retrying...');
+        term.write('\r\n\x1b[33m[System] Disconnected. Reconnecting...\x1b[m\r\n');
+        setTimeout(connect, reconnectInterval);
+        reconnectInterval = Math.min(reconnectInterval * 2, 30000);
+    };
+
+    socket.onerror = (err) => {
+        console.error('[Socket] Error:', err);
+    };
+}
+
+connect();
 
 term.onData(data => {
-    socket.send(JSON.stringify({ type: 'input', data }));
+    if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({ type: 'input', data }));
+    }
 });
 
 window.addEventListener('resize', () => {
     fitAddon.fit();
-    socket.send(JSON.stringify({
-        type: 'resize',
-        cols: term.cols,
-        rows: term.rows
-    }));
+    if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({
+            type: 'resize',
+            cols: term.cols,
+            rows: term.rows
+        }));
+    }
 });
 
 // 3. Initialize Monaco Editor
