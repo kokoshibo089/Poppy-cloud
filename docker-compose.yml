@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  gitlinux-kernel:
+    build: .
+    container_name: gitlinux-kernel
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./workspaces:/app/workspaces
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - PORT=3000

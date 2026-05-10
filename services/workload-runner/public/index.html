@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitLinux | Cyberpunk Cloud IDE</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Xterm.js for Terminal -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.min.js"></script>
+    <!-- Monaco Editor -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs/loader.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Sidebar -->
+        <aside class="sidebar neon-border">
+            <div class="logo">GITLINUX</div>
+            <nav>
+                <div class="nav-item active">📁 Explorer</div>
+                <div class="nav-item">🔍 Search</div>
+                <div class="nav-item">🔀 Git</div>
+                <div class="nav-item">🚀 Deploy</div>
+                <div class="nav-item">🤖 AI</div>
+            </nav>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="workspace">
+            <div class="editor-container glass">
+                <div class="tabs">
+                    <div class="tab active">index.js</div>
+                </div>
+                <div id="monaco-editor"></div>
+            </div>
+
+            <!-- Resizable Terminal -->
+            <div class="terminal-container glass neon-border-top">
+                <div class="terminal-header">
+                    <span>TERMINAL</span>
+                    <span id="status">● CONNECTED</span>
+                </div>
+                <div id="terminal"></div>
+            </div>
+        </main>
+    </div>
+    <script src="client.js"></script>
+</body>
+</html>

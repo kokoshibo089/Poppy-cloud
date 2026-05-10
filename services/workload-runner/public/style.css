@@ -1,0 +1,121 @@
+:root {
+    --neon-blue: #00f3ff;
+    --neon-pink: #ff00ff;
+    --bg-dark: #050505;
+    --glass-bg: rgba(20, 20, 20, 0.8);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background-color: var(--bg-dark);
+    color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+    overflow: hidden;
+}
+
+#app {
+    display: flex;
+    height: 100vh;
+}
+
+.neon-border { border: 1px solid var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); }
+.neon-border-top { border-top: 1px solid var(--neon-pink); box-shadow: 0 -5px 15px rgba(255, 0, 255, 0.2); }
+
+/* Sidebar */
+.sidebar {
+    width: 200px;
+    background: var(--glass-bg);
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    backdrop-filter: blur(10px);
+}
+
+.logo {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--neon-blue);
+    margin-bottom: 40px;
+    text-shadow: 0 0 10px var(--neon-blue);
+}
+
+.nav-item {
+    padding: 15px 25px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.nav-item:hover, .nav-item.active {
+    color: var(--neon-blue);
+    background: rgba(0, 243, 255, 0.1);
+    border-right: 3px solid var(--neon-blue);
+}
+
+/* Workspace */
+.workspace {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-container {
+    flex: 2;
+    background: rgba(10, 10, 10, 0.9);
+    position: relative;
+}
+
+.tabs {
+    display: flex;
+    background: #111;
+    border-bottom: 1px solid #222;
+}
+
+.tab {
+    padding: 10px 20px;
+    font-size: 0.8rem;
+    color: #888;
+    border-right: 1px solid #222;
+    cursor: pointer;
+}
+
+.tab.active {
+    background: var(--bg-dark);
+    color: var(--neon-blue);
+    border-bottom: 2px solid var(--neon-blue);
+}
+
+#monaco-editor {
+    height: calc(100% - 40px);
+}
+
+/* Terminal */
+.terminal-container {
+    flex: 1;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+}
+
+.terminal-header {
+    background: #111;
+    padding: 5px 15px;
+    font-size: 0.7rem;
+    color: #555;
+    display: flex;
+    justify-content: space-between;
+}
+
+#status { color: var(--neon-blue); }
+
+#terminal {
+    flex: 1;
+    padding: 10px;
+}
+
+.glass {
+    backdrop-filter: blur(10px);
+}
