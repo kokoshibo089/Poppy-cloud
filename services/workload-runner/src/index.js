@@ -9,6 +9,11 @@ const server = http.createServer(app);
 // Serve Static Frontend
 app.use(express.static(path.join(__dirname, '../public')));
 
+// Health Check Endpoint for Hosting Providers (Koyeb, Render, etc.)
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'healthy', timestamp: new Date() });
+});
+
 // Initialize the WebSocket Gateway
 new WebSocketGateway(server);
 
