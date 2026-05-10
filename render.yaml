@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: gitlinux-cloud
+    name: gitlinux-pro-cloud
     env: docker
     plan: free
     region: oregon
